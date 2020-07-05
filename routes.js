@@ -9,4 +9,5 @@ module.exports = (app) => {
   app.get('/products/:id', products.getProductById)
   app.post('/checkout/sign-in', authentication.authenticate)
   app.post('/checkout/fullfillment', orders.placeOrder)
+  app.put('/checkout/fullfillment', orders.updateUserAddress)
 }

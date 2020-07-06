@@ -43,4 +43,23 @@ module.exports = {
       res.status(400).send()
     }
   },
+  async getUserOrder(req, res) {
+    try {
+      console.log(req.headers.id)
+      const ordersdb = (await db()).collection('orders')
+      ordersdb.find({ userId: req.headers.id }).toArray(function (err, docs) {
+        if (err) {
+          console.error(err)
+          res.status(400).send()
+        } else {
+          res.status(200).send({
+            docs,
+          })
+        }
+      })
+    } catch (err) {
+      console.error(err)
+      res.status(400).send()
+    }
+  },
 }

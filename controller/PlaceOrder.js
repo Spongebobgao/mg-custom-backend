@@ -1,26 +1,46 @@
 const { db } = require('./connection')
-
+const updateUserAddress = async (userId, address) => {
+  const addressdb = (await db()).collection('user-address')
+  const userAddress = await addressdb.findOne({ userId: userId })
+  if (userAddress !== null) {
+    addressdb.updateOne(
+      { userId: userId },
+      {
+        $set: { userAddress: address },
+        function(err) {
+          if (err) {
+            console.error(err)
+          }
+        },
+      }
+    )
+  } else {
+    addressdb.insertOne({ userId: userId, userAddress: address }, function (
+      err
+    ) {
+      if (err) {
+        console.error(err)
+      }
+    })
+  }
+}
 module.exports = {
   async placeOrder(req, res) {
     try {
       const ordersdb = (await db()).collection('orders')
-      ordersdb.insertOne(req.body, function (err) {
+      ordersdb.insertOne(req.body.order, async function (err) {
         if (err) {
           console.error(err)
           res.status(400).send()
         } else {
+          await updateUserAddress(req.body.userId, req.body.address)
+          console.log('here')
           res.status(200).send()
         }
       })
     } catch (err) {
+      console.error(err)
       res.status(400).send()
     }
-  },
-  async updateUserAddress(req, res) {
-    const addressdb = (await db()).collection('user-address')
-    const address = addressdb.findOne({ userId: req.body.userId })
-    // if (address !== null) {
-    //   addressdb.update()
-    // }
   },
 }

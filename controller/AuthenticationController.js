@@ -23,4 +23,18 @@ module.exports = {
       res.send(user)
     }
   },
+  async getUserAddress(req, res) {
+    try {
+      const addressdb = (await db()).collection('user-address')
+      console.log(req.headers)
+      const userAddress = await addressdb.findOne({
+        userId: req.headers.userid,
+      })
+      console.log(userAddress)
+      res.status(200).send(userAddress)
+    } catch (err) {
+      console.error(err)
+      res.status(400).send()
+    }
+  },
 }

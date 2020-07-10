@@ -1,7 +1,7 @@
 const products = require('./controller/productsController')
 const homeSlide = require('./controller/homeSlideController')
 const authentication = require('./controller/AuthenticationController')
-const orders = require('./controller/placeOrder')
+const orders = require('./controller/PlaceOrder')
 
 module.exports = (app) => {
   app.get('/', homeSlide.getSlideShowImages)
